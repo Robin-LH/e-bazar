@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.heroCard {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.heroCard::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  background-image: url("../assets/Vector.png");
+  background-size: auto;
+  background-color: #276dcb;
+  z-index: -1;
+}
