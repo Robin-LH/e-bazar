@@ -16,6 +16,8 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
   const { cartItems, setCartItems } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
 
+  const hasDiscount = discountCheck(product.discount);
+
   const isDisable = cartItems.some((item: any) => item.product?._id === product._id) || loading;
 
   const addToCart = async () => {
@@ -66,6 +68,16 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
       </div>
     </div>
   );
+};
+
+const discountCheck = (payload: any) => {
+  if (!payload.start) return false;
+
+  const startDate = new Date(payload.start).getTime();
+  const endDate = new Date(payload.end).getTime();
+  const today = new Date().getTime();
+  if (startDate > today && endDate < today) return true;
+  return false;
 };
 
 export default SingleProduct;
