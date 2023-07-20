@@ -28,7 +28,7 @@ const FileUpload: FC<FileUploadProps> = ({ onChange }) => {
                 type="file"
                 accept=".png, .jpeg, .jpg"
                 onChange={(e: any) => {
-                  onChange(e.target.files[0]);
+                  onChange && onChange(e.target.files[0]);
                   if (e.target.files.length) {
                     const url = URL.createObjectURL(e.target.files[0]);
                     setImgPreview(url);
