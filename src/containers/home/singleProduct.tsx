@@ -4,6 +4,7 @@ import apiClient from "@/app/apiClient";
 import LoadingSpinner from "@/components/loadingSpinner";
 import Typography from "@/components/typography";
 import { CartContext } from "@/context/cart.context";
+import discountCheck from "@/utils/discountCheck";
 import axios from "axios";
 import Image from "next/image";
 import { FC, useContext, useState } from "react";
@@ -16,7 +17,7 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
   const { cartItems, setCartItems } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
 
-  const hasDiscount = discountCheck(product.discount);
+  const { hasDiscount, currentPrice } = discountCheck(product.discount, +product.price);
 
   const isDisable = cartItems.some((item: any) => item.product?._id === product._id) || loading;
 
@@ -36,7 +37,15 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
   };
 
   return (
-    <div key={product._id} className="border p-6 relative">
+    <div key={product._id} className="border p-6 relative overflow-hidden">
+      {hasDiscount && (
+        <div className="absolute left-0 top-0 h-12 w-12">
+          <div className="absolute transform -rotate-45 bg-primary text-center text-sm text-white font-semibold py-1 left-[-34px] top-[20px] w-[140px]">
+            25% OFF
+          </div>
+        </div>
+      )}
+
       <Image
         src={product.image}
         alt={product.title}
@@ -46,7 +55,8 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
       />
       <Typography className="font-semibold">{product.title}</Typography>
       <Typography variant="H4" className="font-semibold">
-        ${product.price}
+        ${hasDiscount ? currentPrice : product.price}{" "}
+        {hasDiscount && <del className="text-xs">${product.price}</del>}
       </Typography>
 
       <button
@@ -68,16 +78,6 @@ const SingleProduct: FC<SingleProductProps> = ({ product }) => {
       </div>
     </div>
   );
-};
-
-const discountCheck = (payload: any) => {
-  if (!payload.start) return false;
-
-  const startDate = new Date(payload.start).getTime();
-  const endDate = new Date(payload.end).getTime();
-  const today = new Date().getTime();
-  if (startDate > today && endDate < today) return true;
-  return false;
 };
 
 export default SingleProduct;

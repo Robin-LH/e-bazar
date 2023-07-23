@@ -62,7 +62,7 @@ const Products: FC = () => {
         {loading ? (
           <LoadingSpinner containerHeight={200} dimention={[80, 80]} />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-4 border">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
             {products.products.map((product: any) => (
               <SingleProduct key={product._id} product={product} />
             ))}
